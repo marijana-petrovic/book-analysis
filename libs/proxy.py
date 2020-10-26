@@ -1,0 +1,1 @@
+# ovde ide funkcija koja ti vrati random proxy
