@@ -10,8 +10,8 @@ class DataBase:
         self.cursor.executemany(query, values)
         self.cnx.commit()
 
-    def execute_(self, query):
-        self.cursor.execute(query)
+    def execute_(self, query, values = ()):
+        self.cursor.execute(query, values)
         rows = self.cursor.fetchall()
         return rows
 
@@ -20,19 +20,20 @@ class DataBase:
                           "(genre_name, genre_url, bookstore)"
                           "VALUES (%s, %s, %s)", genre_tuples)
 
-    def get_genre_urls_from_db(self):
-        return self.execute_("SELECT * FROM genre_urls")
+    def get_genre_urls_from_db(self, bookstore_id):
+        return self.execute_("SELECT * FROM genre_urls WHERE bookstore=%s", (bookstore_id,))
 
     def writing_book_urls_in_db(self, book_tuples):
         self.execute_many("INSERT INTO book_urls"
-                          "(book_title, book_url, genre_id)"
-                          "VALUES (%s, %s, %s)", book_tuples)
+                          "(book_title, book_url, genre_id, bookstore_id)"
+                          "VALUES (%s, %s, %s, %s)", book_tuples)
 
-    def get_book_urls_from_db(self):
-        return self.execute_("SELECT * FROM book_urls")
+    def get_book_urls_from_db(self, bookstore_id):
+        return self.execute_("SELECT * FROM book_urls WHERE bookstore_id=%s", (bookstore_id,))
 
     def writing_book_info_in_db(self, book_info_tuples):
         self.execute_many("INSERT INTO book_info"
-                          "(title, author, book_cover, description, price_without_discount, online_price, publisher, id_number, isbn, year, letter, binding, book_format, number_of_pages, category_id, rating, comments)"
-                          "VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)",
+                          "(title, author, book_cover, description, price_without_discount, online_price, publisher,"
+                          "id_number, isbn, year, letter, binding, book_format, number_of_pages, category_id, rating, comments, bookstore_id)"
+                          "VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)",
                           book_info_tuples)

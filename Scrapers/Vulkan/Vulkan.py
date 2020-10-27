@@ -5,7 +5,6 @@ import time
 from Database.Db import DataBase
 from libs.proxy import Proxy
 
-
 class Vulkan:
     def __init__(self):
         self.db = DataBase()
@@ -27,21 +26,22 @@ class Vulkan:
         for link in cat_links:
             names.append(link.text)
             links.append(link['href'])
-            bookstore.append(2)
+            bookstore.append(self.bookstore_id)
 
         zipped = zip(names, links, bookstore)
         self.db.writing_genre_urls_in_db(zipped)
 
     def get_genre_urls(self):
-        rows = self.db.get_genre_urls_from_db()
+        rows = self.db.get_genre_urls_from_db(self.bookstore_id)
         for row in rows:
             time.sleep(1)
-            self.scraping_book_urls(row[2], row[0])
+            self.scraping_book_urls(row[2], row[0], self.bookstore_id)
 
     def scraping_book_urls(self, genre_urls, genre_id):
         book_titles = []
         book_links = []
         genre_idnum = []
+        bookstore_idnum = []
 
         time.sleep(0.3)
         s = requests.Session()
@@ -55,8 +55,9 @@ class Vulkan:
             book_links.append(i.find('div', class_='title').a['href'])
             book_titles.append(i.find('div', class_='title').text.strip())
             genre_idnum.append(genre_id)
+            bookstore_idnum.append(self.bookstore_id)
 
-        book_data = zip(book_titles, book_links, genre_idnum)
+        book_data = zip(book_titles, book_links, genre_idnum, bookstore_idnum)
         self.db.writing_book_urls_in_db(book_data)
 
         pagination = soup.find('ul', class_='pagination')
@@ -74,7 +75,7 @@ class Vulkan:
             self.scraping_book_urls(book_link, genre_id)
 
     def get_book_urls(self):
-        rows = self.db.get_book_urls_from_db()
+        rows = self.db.get_book_urls_from_db(self.bookstore_id)
         for row in rows:
             time.sleep(0.3)
             self.scraping_book_info(row[2], row[3])
@@ -160,5 +161,5 @@ class Vulkan:
 
         book_info_list.append((title, author, book_cover, description, price_without_discount, online_price, publisher,
                                id_number, isbn, year, letter, binding, book_format, number_of_pages, category_id,
-                               rating, comments))
+                               rating, comments, self.bookstore_id))
         self.db.writing_book_info_in_db(book_info_list)

@@ -31,7 +31,7 @@ class Delfi:
         self.db.writing_genre_urls_in_db(list_of_genre_tuples)
 
     def get_genre_urls(self):
-        rows = self.db.get_genre_urls_from_db()
+        rows = self.db.get_genre_urls_from_db(self.bookstore_id)
         for i in rows:
             time.sleep(0.5)
             self.scraping_book_urls(i[2], i[0])
@@ -50,8 +50,9 @@ class Delfi:
             book_title = url.h3.a.text
             book_url = url.h3.a['href']
             genre_idnum = genre_id
+            bookstore_id = self.bookstore_id
 
-            list_of_books_tuple.append((book_title, book_url, genre_idnum))
+            list_of_books_tuple.append((book_title, book_url, genre_idnum, bookstore_id))
         self.db.writing_book_urls_in_db(list_of_books_tuple)
 
         pagination = soup.find('a', rel='next')
@@ -60,16 +61,16 @@ class Delfi:
             self.scraping_book_urls(link, genre_id)
 
     def get_book_urls(self):
-        rows = self.db.get_book_urls_from_db()
-        for i in rows:
-            time.sleep(0.5)
-            self.scraping_book_info(i[3], i[4])
+        rows = self.db.get_book_urls_from_db(self.bookstore_id)
+        for row in rows:
+            time.sleep(0.2)
+            self.scraping_book_info(row[2], row[3])
 
     def scraping_book_info(self, url, category_id):
         book_info_list_of_tuples = []
         list_left = []
         list_right = []
-        time.sleep(0.4)
+        time.sleep(0.1)
 
         s = requests.Session()
         s.proxies = {self.proxy.proxy_settings}
@@ -146,7 +147,7 @@ class Delfi:
 
         book_info_list_of_tuples.append(
             (title, author, book_cover, description, price_without_discount, online_price, publisher, id_number, isbn,
-             year, letter, binding, book_format, number_of_pages, category_id, rating, comments))
+             year, letter, binding, book_format, number_of_pages, category_id, rating, comments,self.bookstore_id))
         self.db.writing_book_info_in_db(book_info_list_of_tuples)
 
 
