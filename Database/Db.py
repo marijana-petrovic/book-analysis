@@ -1,0 +1,38 @@
+import mysql.connector
+
+
+class DataBase:
+    def __init__(self):
+        self.cnx = mysql.connector.connect(user='', password='', host='', database='')
+        self.cursor = self.cnx.cursor()
+
+    def execute_many(self, query, values):
+        self.cursor.executemany(query, values)
+        self.cnx.commit()
+
+    def execute_(self, query):
+        self.cursor.execute(query)
+        rows = self.cursor.fetchall()
+        return rows
+
+    def writing_genre_urls_in_db(self, genre_tuples):
+        self.execute_many("INSERT INTO genre_urls"
+                          "(genre_name, genre_url, bookstore)"
+                          "VALUES (%s, %s, %s)", genre_tuples)
+
+    def get_genre_urls_from_db(self):
+        return self.execute_("SELECT * FROM genre_urls")
+
+    def writing_book_urls_in_db(self, book_tuples):
+        self.execute_many("INSERT INTO book_urls"
+                          "(book_title, book_url, genre_id)"
+                          "VALUES (%s, %s, %s)", book_tuples)
+
+    def get_book_urls_from_db(self):
+        return self.execute_("SELECT * FROM book_urls")
+
+    def writing_book_info_in_db(self, book_info_tuples):
+        self.execute_many("INSERT INTO book_info"
+                          "(title, author, book_cover, description, price_without_discount, online_price, publisher, id_number, isbn, year, letter, binding, book_format, number_of_pages, category_id, rating, comments)"
+                          "VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)",
+                          book_info_tuples)
