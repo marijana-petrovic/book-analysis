@@ -34,8 +34,8 @@ class Vulkan:
     def get_genre_urls(self):
         rows = self.db.get_genre_urls_from_db(self.bookstore_id)
         for row in rows:
-            time.sleep(1)
-            self.scraping_book_urls(row[2], row[0], self.bookstore_id)
+            time.sleep(0.5)
+            self.scraping_book_urls(row[2], row[0])
 
     def scraping_book_urls(self, genre_urls, genre_id):
         book_titles = []

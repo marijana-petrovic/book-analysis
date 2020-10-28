@@ -10,7 +10,7 @@ class DataBase:
         self.cursor.executemany(query, values)
         self.cnx.commit()
 
-    def execute_(self, query, values = ()):
+    def execute_(self, query, values=()):
         self.cursor.execute(query, values)
         rows = self.cursor.fetchall()
         return rows
@@ -37,3 +37,16 @@ class DataBase:
                           "id_number, isbn, year, letter, binding, book_format, number_of_pages, category_id, rating, comments, bookstore_id)"
                           "VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)",
                           book_info_tuples)
+
+    def get_book_data_from_db(self):
+        return self.execute_("SELECT * FROM book_info")
+
+    def get_top_15(self):
+        return self.execute_(
+            "SELECT author,  COUNT(book_id) as count FROM books.book_info GROUP BY author ORDER BY count DESC LIMIT 15")
+
+    def authors_performance(self, author):
+        return self.execute_("SELECT author, title, rating FROM books.book_info WHERE author =%s ORDER BY rating", (author,))
+
+    def top_rated_books_15(self):
+        pass
