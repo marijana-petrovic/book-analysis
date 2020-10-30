@@ -5,6 +5,7 @@ import time
 from Database.Db import DataBase
 from libs.proxy import Proxy
 
+
 class Vulkan:
     def __init__(self):
         self.db = DataBase()

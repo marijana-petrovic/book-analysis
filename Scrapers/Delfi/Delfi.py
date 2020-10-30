@@ -7,7 +7,6 @@ from libs.proxy import Proxy
 
 
 class Delfi:
-
     def __init__(self):
         self.db = DataBase()
         self.proxy = Proxy()
@@ -147,7 +146,5 @@ class Delfi:
 
         book_info_list_of_tuples.append(
             (title, author, book_cover, description, price_without_discount, online_price, publisher, id_number, isbn,
-             year, letter, binding, book_format, number_of_pages, category_id, rating, comments,self.bookstore_id))
+             year, letter, binding, book_format, number_of_pages, category_id, rating, comments, self.bookstore_id))
         self.db.writing_book_info_in_db(book_info_list_of_tuples)
-
-

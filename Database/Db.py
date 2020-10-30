@@ -45,8 +45,8 @@ class DataBase:
         return self.execute_(
             "SELECT author,  COUNT(book_id) as count FROM books.book_info GROUP BY author ORDER BY count DESC LIMIT 15")
 
-    def authors_performance(self, author):
+    def get_authors_performance(self, author):
         return self.execute_("SELECT author, title, rating FROM books.book_info WHERE author =%s ORDER BY rating", (author,))
 
-    def top_rated_books_15(self):
-        pass
+    def get_top_rated_authors(self):
+        return self.execute_("SELECT DISTINCT author, COUNT(book_id) AS count FROM books.book_info WHERE rating = 5 GROUP BY author ORDER BY COUNT(book_id) DESC")
