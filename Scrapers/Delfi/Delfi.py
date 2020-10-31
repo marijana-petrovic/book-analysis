@@ -101,9 +101,9 @@ class Delfi:
 
         if col.select('div.product-price > p'):
             if col.find('p', class_='cena-u-knjizarama'):
-                price_without_discount = col.find('p', class_='cena-u-knjizarama').text.split(':')[1]
+                price_without_discount = col.find('p', class_='cena-u-knjizarama').text.split(':')[1][:-3]
             if col.find('p', class_='cena-na-sajtu').span:
-                online_price = col.find('p', class_='cena-na-sajtu').span.text
+                online_price = col.find('p', class_='cena-na-sajtu').span.text.split(' ')[0]
             else:
                 online_price = col.find('p', class_='cena-na-sajtu').text.split(':')[1]
 
@@ -147,4 +147,7 @@ class Delfi:
         book_info_list_of_tuples.append(
             (title, author, book_cover, description, price_without_discount, online_price, publisher, id_number, isbn,
              year, letter, binding, book_format, number_of_pages, category_id, rating, comments, self.bookstore_id))
-        self.db.writing_book_info_in_db(book_info_list_of_tuples)
+        #self.db.writing_book_info_in_db(book_info_list_of_tuples)
+
+delfi = Delfi()
+delfi.get_book_urls()
