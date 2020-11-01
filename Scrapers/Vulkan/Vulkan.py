@@ -44,7 +44,7 @@ class Vulkan:
         genre_idnum = []
         bookstore_idnum = []
 
-        time.sleep(0.3)
+        time.sleep(1)
         s = requests.Session()
         s.proxies = {self.proxy.proxy_settings}
         source = s.get(genre_urls).text

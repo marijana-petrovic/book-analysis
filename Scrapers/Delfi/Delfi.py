@@ -69,7 +69,7 @@ class Delfi:
         book_info_list_of_tuples = []
         list_left = []
         list_right = []
-        time.sleep(0.1)
+        time.sleep(1)
 
         s = requests.Session()
         s.proxies = {self.proxy.proxy_settings}

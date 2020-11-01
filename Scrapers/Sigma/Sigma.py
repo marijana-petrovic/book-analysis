@@ -58,7 +58,7 @@ class Sigma:
                                                                                        class_='page-item d-none d-lg-block')
             for i in numbers:
                 num_of_pages.append(i.a.text)
-            num_of_pages_int = num_of_pages[:-1]
+            num_of_pages_int = num_of_pages[1:-1]
             for i in num_of_pages_int:
                 print('next page')
                 next_page_url = genre_url + '~pg' + i
