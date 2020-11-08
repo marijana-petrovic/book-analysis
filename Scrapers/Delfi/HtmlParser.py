@@ -27,6 +27,14 @@ class HtmlParser(Delfi):
             list_of_books_tuple.append((book_title, book_url, genre_idnum, bookstore_id))
         return list_of_books_tuple
 
+    def check_pagination(self, soup):
+        pagination = soup.find('a', rel='next')
+        if pagination:
+            link = pagination['href']
+            return link
+        else:
+            return False
+
     def parse_book_info_html(self, soup, category_id):
         book_info_list_of_tuples = []
         list_left = []
@@ -104,11 +112,4 @@ class HtmlParser(Delfi):
              year, letter, binding, book_format, number_of_pages, category_id, rating, comments, self.bookstore_id))
         return book_info_list_of_tuples
 
-    def check_pagination(self, soup):
-        pagination = soup.find('a', rel='next')
-        if pagination:
-            link = pagination['href']
-            return link
-        else:
-            return False
 
